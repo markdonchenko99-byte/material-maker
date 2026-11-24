@@ -16,7 +16,7 @@ Painting, mesh/texture painting, custom mesh import, multi-window/undocking, glo
 OnePlus Pad 3: Snapdragon 8 Elite (Adreno), 12/16 GB shared RAM, 13.2" 2400x3392 @ 315 PPI, touch + OnePlus Stylo 2. Android 15+. arm64-v8a only.
 
 ## Base
-Upstream Material Maker 1.6, Godot 4.5.1 (verify exact version in `project.godot` during P1). Build machine: owner's PC with Claude Code.
+Upstream Material Maker master (1.8), Godot 4.7.2 (D5, confirmed in P1). Build machine: owner's PC with Claude Code.
 
 ## Principles
 1. Desktop behavior unchanged; mobile is an overlay (ADR 0001).

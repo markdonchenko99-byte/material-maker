@@ -7,14 +7,14 @@ decisions:
 - D2 mobile overlay, desktop unchanged (ADR 0001)
 - D3 tests first + on-device verification (ADR 0003)
 - D4 branch: `android` on owner's fork; upstream merged in, never rebased away
+- D5 base: upstream master (MM 1.8, Godot 4.7.2 — CI version), owner decision 2026-11-24
 pending:
-- base version: master (MM 1.8 / Godot 4.7.2, CI version) vs tag 1.6 (Godot 4.6); PROJECT.md's "1.6 / 4.5.1" is wrong either way. Recon assumes master.
 - renderer — ADR 0004. P1: must stay Vulkan (Mobile default); Compatibility breaks the local RenderingDevice compute path. Confirm after P2.
 - test framework — ADR 0005. P1: upstream already ships GUT 9.5.0 + `test/`; proposal = reuse GUT, no new dependency.
 - storage access (SAF vs app folder vs MANAGE_EXTERNAL_STORAGE) — decide in P7
 - Android package id / app name (upstream preset: org.rodzlabs.materialmaker)
 ask:
-- owner: confirm base (master vs 1.6); install matching Godot (4.7.2) + export templates
+- owner: install Godot 4.7.2 + export templates (P0/P2)
 - owner: fork URL to add as `origin` and push `android`
 - owner P2: check on tablet that node previews render (local RD + r16f storage images, report R2)
 known_issues:
