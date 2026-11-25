@@ -1,7 +1,7 @@
 phase: P1 done → P2 (owner render smoke) next; P3 task file to be written after P2
 done:
 - P1 recon: `android-port/reports/P1.md`
-- repo: local git from upstream/master 7d6daae3 (MM 1.8, Godot 4.7), branch `android`, remote `upstream` only
+- repo: local git from upstream/master 7d6daae3 (MM 1.8, Godot 4.7), branch `android`; remotes `origin` = github.com/markdonchenko99-byte/material-maker (fork), `upstream` = RodZill4
 decisions:
 - D1 scope: procedural only (ADR 0002)
 - D2 mobile overlay, desktop unchanged (ADR 0001)
@@ -15,7 +15,6 @@ pending:
 - Android package id / app name (upstream preset: org.rodzlabs.materialmaker)
 ask:
 - owner: install Godot 4.7.2 + export templates (P0/P2)
-- owner: fork URL to add as `origin` and push `android`
 - owner P2: check on tablet that node previews render (local RD + r16f storage images, report R2)
 known_issues:
 - add-node popup reads nodes from exe dir outside the editor → likely crash on Android (`add_node_popup.gd:281`)
