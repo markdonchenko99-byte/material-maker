@@ -11,5 +11,12 @@ static func get_resource_dir() -> String:
 		return ProjectSettings.globalize_path("res://material_maker")
 	return OS.get_executable_path().get_base_dir()
 
+## Directory the add-node popup reads .mmg files from.
+static func get_mmg_dir() -> String:
+	var nodes_path : String = OS.get_executable_path().get_base_dir() + "/nodes"
+	if OS.has_feature("editor"):
+		nodes_path = STD_GENDEF_PATH
+	return nodes_path
+
 static func get_nodes_paths() -> Array:
 	return [ STD_GENDEF_PATH, get_resource_dir()+"/nodes", "user://shared_nodes" ]
