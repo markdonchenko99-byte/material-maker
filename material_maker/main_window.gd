@@ -54,9 +54,9 @@ const MENU_MANAGE_PRESETS : int = 1003
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
-	{ menu="File/New paint project (Experimental)", command="new_paint_project", shortcut="Control+Shift+N", not_in_ports=["HTML5"] },
+	{ menu="File/New paint project (Experimental)", command="new_paint_project", shortcut="Control+Shift+N", not_in_ports=["HTML5", "Android"] },
 	{ menu="File/Load", command="load_project", shortcut="Control+O" },
-	{ menu="File/Load material from website", command="load_material_from_website" },
+	{ menu="File/Load material from website", command="load_material_from_website", not_in_ports=["Android"] },
 	{ menu="File/Load recent", submenu="load_recent", standalone_only=true, not_in_ports=["HTML5"] },
 	{ menu="File/-" },
 	{ menu="File/Save", command="save_project", shortcut="Control+S" },
@@ -119,9 +119,9 @@ const MENU : Array[Dictionary] = [
 	{ menu="Tools/Environment editor", command="environment_editor", not_in_ports=["HTML5"] },
 	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
-	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
+	{ menu="Help/User manual", command="show_doc", shortcut="F1", not_in_ports=["Android"] },
 	{ menu="Help/Example projects", command="show_example_projects"},
-	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
+	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1", not_in_ports=["Android"] },
 	{ menu="Help/Report a bug", command="bug_report" },
 	{ menu="Help/" },
 	{ menu="Help/About", command="about" }
@@ -133,6 +133,7 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	MMMobile.setup_main_window(self)
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().grab_focus()
@@ -150,13 +151,13 @@ func _ready() -> void:
 	get_window().min_size = Vector2(1024, 600)
 
 	# Restore the window position/size if values are present in the configuration cache
-	if mm_globals.config.has_section_key("window", "screen"):
+	if MMMobile.keep_window_state() and mm_globals.config.has_section_key("window", "screen"):
 		get_window().current_screen = mm_globals.config.get_value("window", "screen")
 
-	if mm_globals.config.has_section_key("window", "maximized"):
+	if MMMobile.keep_window_state() and mm_globals.config.has_section_key("window", "maximized"):
 		get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
 
-	if get_window().mode != Window.MODE_MAXIMIZED:
+	if MMMobile.keep_window_state() and get_window().mode != Window.MODE_MAXIMIZED:
 		if mm_globals.config.has_section_key("window", "position"):
 			get_window().position = mm_globals.config.get_value("window", "position")
 		else:
@@ -279,10 +280,11 @@ func do_update_menus() -> void:
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
-	mm_globals.config.set_value("window", "screen", get_window().current_screen)
-	mm_globals.config.set_value("window", "maximized", (get_window().mode == Window.MODE_MAXIMIZED) || ((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
-	mm_globals.config.set_value("window", "position", get_window().position)
-	mm_globals.config.set_value("window", "size", get_window().size)
+	if MMMobile.keep_window_state():
+		mm_globals.config.set_value("window", "screen", get_window().current_screen)
+		mm_globals.config.set_value("window", "maximized", (get_window().mode == Window.MODE_MAXIMIZED) || ((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
+		mm_globals.config.set_value("window", "position", get_window().position)
+		mm_globals.config.set_value("window", "size", get_window().size)
 	layout.save_config()
 
 func _input(event: InputEvent) -> void:
@@ -789,7 +791,8 @@ func load_project() -> void:
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
 		dialog.add_filter("*.ptex;Procedural Textures File")
-		dialog.add_filter("*.mmpp;Model Painting File")
+		if not MMMobile.is_mobile():
+			dialog.add_filter("*.mmpp;Model Painting File")
 		dialog.current_dir = mm_globals.config.get_value("path", "project", mm_globals.get_home_directory())
 		var files = await dialog.select_files()
 		if files.size() > 0:
@@ -824,7 +827,8 @@ func do_load_project(file_name : String) -> bool:
 			status = await do_load_material(file_name, false)
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 		"mmpp":
-			status = do_load_painting(file_name)
+			if not MMMobile.is_mobile():
+				status = do_load_painting(file_name)
 	if ! FileAccess.file_exists(file_name):
 		status = false
 	if status:
@@ -1285,6 +1289,9 @@ func about() -> void:
 	about_box.popup_centered()
 
 func show_example_projects() -> void:
+	if MMMobile.is_mobile():
+		MMMobile.open_examples(self)
+		return
 	var base_dir : String = MMPaths.get_resource_dir().replace("\\", "/")
 	var release_examples_path : String = base_dir.path_join("examples")
 	var devel_examples_path : String = ProjectSettings.globalize_path("res://material_maker/examples")
@@ -1496,6 +1503,8 @@ func on_files_dropped(files : PackedStringArray) -> void:
 				else:
 					remove_recent(f)
 			"obj", "glb", "gltf", "fbx":
+				if MMMobile.is_mobile():
+					continue
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp", "dds":

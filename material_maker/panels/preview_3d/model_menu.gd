@@ -51,8 +51,12 @@ func update_model_selector() -> void:
 	Model.clear()
 	for i in objects_count:
 		var o: Node = preview3D.objects.get_child(i)
+		if MMMobile.is_mobile() and o.name == "Custom":
+			continue
 		Model.add_item(o.name, i)
 	for i in min(custom_models.size(), MAX_CUSTOM_MODELS):
+		if MMMobile.is_mobile():
+			break
 		Model.add_item(custom_models[i].get_file(), i+objects_count)
 
 func _on_model_item_selected(index : int, custom_model_path : String = "") -> void:

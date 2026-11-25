@@ -278,9 +278,7 @@ func sub_node_add_items(idx : int, filter_text : String, tree : String) -> int:
 	if (qc_slot_type != -1 and not check_quick_connect(base_item.item)):
 		return idx
 
-	var nodes_path : String = OS.get_executable_path().get_base_dir() + "/nodes"
-	if OS.has_feature("editor"):
-		nodes_path = MMPaths.STD_GENDEF_PATH
+	var nodes_path : String = MMPaths.get_mmg_dir()
 
 	var node_params : Array
 	if mmg not in node_params_cache:
