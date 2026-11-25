@@ -1,4 +1,4 @@
-phase: P0 done (Godot 4.7.2 + Android templates, JDK 17, SDK, adb sees OnePlus Pad 3 / Android 16), P1 done → P2 (owner render smoke) next; P3 task file to be written after P2
+phase: P0 done (Godot 4.7.2 + Android templates, JDK 17, SDK, adb sees OnePlus Pad 3 / Android 16), P1 done → P3 next (task: `android-port/tasks/P3-first-apk.md`); owner chose to skip separate P2 — render smoke is done inside P3 on the APK
 done:
 - P1 recon: `android-port/reports/P1.md`
 - repo: local git from upstream/master 7d6daae3 (MM 1.8, Godot 4.7), branch `android`; remotes `origin` = github.com/markdonchenko99-byte/material-maker (fork), `upstream` = RodZill4

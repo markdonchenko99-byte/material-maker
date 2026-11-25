@@ -11,6 +11,7 @@ Format: `path` — purpose. `[planned: Px]` = not created yet. Keep current (AGE
 - `android-port/UPSTREAM_TOUCHES.md` — every upstream file modified, with reason
 - `android-port/adr/` — decisions
 - `android-port/tasks/` — one file per phase
+- `android-port/tasks/P3-first-apk.md` — P3 task: first debug APK
 - `android-port/reports/` — one report per phase
 - `.claude/agents/code-explorer.md` — read-only search subagent
 - `.claude/agents/device-runner.md` — adb install/launch/logcat subagent
