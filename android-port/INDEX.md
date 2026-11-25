@@ -19,7 +19,7 @@ Format: `path` — purpose. `[planned: Px]` = not created yet. Keep current (AGE
 
 ## Upstream code (filled in P1, master 7d6daae3)
 - `project.godot` — engine config (Godot 4.7, MM 1.8), autoloads, input map, renderer defaults
-- `export_presets.cfg` — upstream presets incl. stale Android preset.7 (to be updated in P3)
+- `export_presets.cfg` — presets; Android = preset.7 (arm64, D6 id, P3)
 - `parse_args.gd` — main scene: cmdline export or splash → main window
 - `splash_screen/splash_screen.gd` — splash, window sizing, threaded main_window load
 - `material_maker/main_window.gd` — MENU table, load/save/export, window state
@@ -54,6 +54,9 @@ Format: `path` — purpose. `[planned: Px]` = not created yet. Keep current (AGE
 - `android-port/reports/P1.md` — P1 recon report / risk map
 
 ## Android layer
-- `[planned: P3]` `material_maker/android/` — mobile-only scripts/scenes
-- `[planned: P3]` `export_presets.cfg` — Android preset (arm64-v8a)
-- `[planned: P3]` `android-port/DEVICE_CHECKLIST.md` — on-device verification steps
+- `material_maker/android/` — mobile-only scripts/scenes
+- `material_maker/android/mobile.gd` — `MMMobile`: is_mobile (test override), gating, main-window setup, examples dialog
+- `test/android/test_mobile.gd` — P3 GUT tests (paths, menu filter, gating, Android preset)
+- `android-port/DEVICE_CHECKLIST.md` — on-device verification steps
+- `android-port/reports/P3.md` — P3 report
+- `android-port/reports/screens/` — device/desktop screenshots
